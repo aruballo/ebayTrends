@@ -32,6 +32,7 @@ ebayTrends.searchView = Backbone.View.extend({
     }
 });
 
+//View for table row
 ebayTrends.tableRowView = Backbone.View.extend({
     template: _.template($('#resultsRow').html()),
     render: function(eventName){
@@ -41,6 +42,7 @@ ebayTrends.tableRowView = Backbone.View.extend({
     }
 });
 
+//View for table
 ebayTrends.tableView = Backbone.View.extend({
     tagName: 'table',
     initialize: function(){
@@ -48,6 +50,17 @@ ebayTrends.tableView = Backbone.View.extend({
     },
     render: function(eventName){
         this.$el.empty();
+        var tableHeader = 
+              "<thead>                  " +
+              "  <tr>                   " +
+              "    <th>Title      </th> " +
+              "    <th>Condition  </th> " +
+              "    <th>Price</th>       " +
+              "    <th>Shipping   </th> " +
+              "  </tr>                  " +
+              "</thead>                 ";
+        
+        this.$el.append(tableHeader);
         
         this.collection.each(function(result){
             var row = new ebayTrends.tableRowView({model: result});
