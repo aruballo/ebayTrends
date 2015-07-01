@@ -8,7 +8,8 @@ ebayTrends.searchView = Backbone.View.extend({
     tagName: 'div',
     
     events:{
-      "click #searchButton"      : "getResults"
+      "click #searchButton"      : function(){this.getResults('findItemsByKeywords')},
+      "click #graphButton"       : function(){this.getResults('findCompletedItems')}
     },
     
     render: function(){
@@ -21,15 +22,37 @@ ebayTrends.searchView = Backbone.View.extend({
     getResults: function(operation){
         var searchValue = document.getElementById("searchValue").value;
         var parameters = 'SECURITY-APPNAME=AntonioR-c20d-4f92-aad4-791bfb005d8c&' +
-            'OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&RESPONSE-DATA-FORMAT=JSON' +
+            'OPERATION-NAME=' + operation + '&SERVICE-VERSION=1.0.0&RESPONSE-DATA-FORMAT=JSON' +
             '&REST-PAYLOAD&keywords=' + searchValue;
-        this.currentCollection = new ebayTrends.collection();
+            
+        if(operation == "findCompletedItems"){
+            parameters = parameters + "&itemFilter(0).name=SoldItemsOnly" +
+                       + "itemFilter(0).value=true";
+
+            this.currentCollection = new ebayTrends.graphCollection();
+        }
+        else{
+            this.currentCollection = new ebayTrends.searchCollection();
+        }
+        
         this.currentCollection.fetch({dataType: 'jsonp', data: parameters, success: (function(context){
             return function(){
-                context.createTable();
+                if(operation == "findItemsByKeywords"){
+                    context.createTable();
+                }
+                else if(operation == "findCompletedItems"){
+                    context.createGraph();
+                }
+                else{
+                    return;
+                }
             };
         })(this)});
       
+    },
+    
+    createGraph: function(){
+        console.log(this.currentCollection); 
     },
     
     createTable: function(){
