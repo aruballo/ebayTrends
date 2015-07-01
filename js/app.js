@@ -1,15 +1,24 @@
 //Main javascript file for Ebay Trends app
 var ebayTrends = ebayTrends || {};
 
+//Main View
 ebayTrends.searchView = Backbone.View.extend({
-    el: document.getElementById("mainDiv"),
+    template: _.template($('#mainDiv').html()),
+    
+    tagName: 'div',
     
     events:{
       "click #searchButton"      : "getResults"
     },
     
-    getResults: function(){
-        
+    render: function(){
+            this.$el.empty();
+            this.$el.html(this.template());
+            $('body').append(this.$el);
+            return this;
+    },
+    
+    getResults: function(operation){
         var searchValue = document.getElementById("searchValue").value;
         var parameters = 'SECURITY-APPNAME=AntonioR-c20d-4f92-aad4-791bfb005d8c&' +
             'OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&RESPONSE-DATA-FORMAT=JSON' +
@@ -24,6 +33,7 @@ ebayTrends.searchView = Backbone.View.extend({
     },
     
     createTable: function(){
+        this.render();
         var currentResults = new ebayTrends.tableView({
             collection: this.currentCollection
         });
@@ -50,7 +60,7 @@ ebayTrends.tableView = Backbone.View.extend({
     },
     render: function(eventName){
         this.$el.empty();
-        var tableHeader = 
+        var tableHeader =   
               "<thead>                  " +
               "  <tr>                   " +
               "    <th>Title      </th> " +
@@ -75,3 +85,4 @@ ebayTrends.tableView = Backbone.View.extend({
 
 
 ebayTrends.mainView = new ebayTrends.searchView();
+ebayTrends.mainView.render();
