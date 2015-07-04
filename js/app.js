@@ -24,11 +24,11 @@ ebayTrends.searchView = Backbone.View.extend({
         var parameters = 'SECURITY-APPNAME=AntonioR-c20d-4f92-aad4-791bfb005d8c&' +
             'OPERATION-NAME=' + operation + '&SERVICE-VERSION=1.0.0&RESPONSE-DATA-FORMAT=JSON' +
             '&REST-PAYLOAD&keywords=' + searchValue;
-            
+        
+        //Only show sold items since unsold item data is useless
         if(operation == "findCompletedItems"){
             parameters = parameters + "&itemFilter(0).name=SoldItemsOnly" +
                        + "itemFilter(0).value=true";
-
             this.currentCollection = new ebayTrends.graphCollection();
         }
         else{
@@ -52,7 +52,13 @@ ebayTrends.searchView = Backbone.View.extend({
     },
     
     createGraph: function(){
-        console.log(this.currentCollection); 
+        this.render();
+        var currentResults =  new ebayTrends.graphView({
+            collection: this.currentCollection
+        });
+        var $graph = currentResults.render().$el;
+        this.$el.append($graph);
+        
     },
     
     createTable: function(){
@@ -104,6 +110,52 @@ ebayTrends.tableView = Backbone.View.extend({
         return this;
     }
     
+});
+
+ebayTrends.graphView = Backbone.View.extend({
+    template: _.template($('#graph').html()),
+    render: function(){
+        this.$el.empty();
+        this.$el.html(this.template());
+        $('body').append(this.$el);
+        this.ctx = document.getElementById("itemTrendsGraph").getContext("2d");
+        this.ctx.canvas.width = 1000;
+        this.ctx.canvas.height = 500;
+        
+        //create array of values to chart
+        var values = [];
+        var labels = [];
+        var collectionJSON = this.collection.toJSON();
+        console.log(collectionJSON);
+        
+        for(var i = 0; i < collectionJSON.length; i++){
+            values.push(collectionJSON[i].sellingStatus[0].currentPrice[0].__value__);
+            labels.push(i+1);
+        }
+        
+        console.log(values);
+        
+        var data = {
+            labels: labels,
+            datasets: [{
+               label: "My First dataset",
+                fillColor: "rgba(220,220,220,0.2)",
+                strokeColor: "rgba(220,220,220,1)",
+                pointColor: "rgba(220,220,220,1)",
+                pointStrokeColor: "#fff",
+                pointHighlightFill: "#fff",
+                pointHighlightStroke: "rgba(220,220,220,1)",
+                data: values
+            }]
+        };
+        
+        var options = {
+            bezierCurve : false           
+        };
+
+        this.chart = new Chart(this.ctx).Line(data, options);
+        return this;
+    },
 });
 
 
