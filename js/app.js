@@ -112,6 +112,7 @@ ebayTrends.tableView = Backbone.View.extend({
     
 });
 
+//View for Chart.js graph
 ebayTrends.graphView = Backbone.View.extend({
     template: _.template($('#graph').html()),
     render: function(){
@@ -126,14 +127,11 @@ ebayTrends.graphView = Backbone.View.extend({
         var values = [];
         var labels = [];
         var collectionJSON = this.collection.toJSON();
-        console.log(collectionJSON);
         
         for(var i = 0; i < collectionJSON.length; i++){
             values.push(collectionJSON[i].sellingStatus[0].currentPrice[0].__value__);
             labels.push(i+1);
         }
-        
-        console.log(values);
         
         var data = {
             labels: labels,
