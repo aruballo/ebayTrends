@@ -28,7 +28,7 @@ ebayTrends.searchView = Backbone.View.extend({
         //Only show sold items since unsold item data is useless
         if(operation == "findCompletedItems"){
             parameters = parameters + "&itemFilter(0).name=SoldItemsOnly" +
-                       + "itemFilter(0).value=true";
+                       + "&itemFilter(0).value=true";
             this.currentCollection = new ebayTrends.graphCollection();
         }
         else{
@@ -146,6 +146,15 @@ ebayTrends.graphView = Backbone.View.extend({
                 data: values
             }]
         };
+        
+        var averagePrice = ebayTrends.utils.calculateAverage(values);
+        var medianPrice = ebayTrends.utils.calculateMedian(values);
+        var modePrice = ebayTrends.utils.calculateMode(values);
+        console.log(medianPrice);
+        
+        document.getElementById("avgPrice").innerHTML = "$" + averagePrice.toFixed(2);
+        document.getElementById("medianPrice").innerHTML = "$" + medianPrice.toFixed(2);
+        document.getElementById("modePrice").innerHTML = "$" + modePrice.toFixed(2);
         
         var options = {
             bezierCurve : false           

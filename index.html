@@ -19,6 +19,14 @@
     <script id="graph" type="text/template">
         <div id="graphDiv">
             <canvas id="itemTrendsGraph"></canvas>
+            <div id="avgDiv">
+                <label for="avgPrice"> Average Price </label>
+                <span id="avgPrice"></span>
+                <label for="medianPrice"> Median Price </label>
+                <span id="medianPrice"></span>
+                <label for="modePrice"> Mode Price </label>
+                <span id="modePrice"></span>
+            </div>
         </div>
     </script>
     
@@ -29,6 +37,7 @@
     <script src="js/underscore.js"></script>
     <script src="js/backbone.js"></script>
     <script src="js/Chart.js"></script>
+    <script src="js/utils.js"></script>
     <script src="js/model.js"></script>
     <script src="js/app.js"></script>
 </html>
