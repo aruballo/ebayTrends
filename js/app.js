@@ -8,25 +8,60 @@ ebayTrends.searchView = Backbone.View.extend({
     tagName: 'div',
     
     events:{
-      "click #searchButton"      : function(){this.getResults('findItemsByKeywords')},
-      "click #graphButton"       : function(){this.getResults('findCompletedItems')}
+      "click #searchButton": 
+      function(){
+          this.operation = 'findItemsByKeywords';
+          this.getResults();
+      },
+      "click #graphButton": 
+      function(){
+          this.operation = 'findCompletedItems';
+          this.getResults();
+      },
+      "click #nextPage": 
+      function(){
+          this.pageNumber++;
+          if(this.pageNumber > 100){
+              this.pageNumber = 100;
+              return;
+          }
+          this.getResults();
+      },
+      "click #previousPage": 
+      function(){
+          if(this.pageNumber <= 1){
+              this.pageNumber = 1;
+              return;
+          }
+          this.pageNumber--;
+          this.getResults();
+      }
     },
     
     render: function(){
+        
+            if(!this.pageNumber){
+                this.pageNumber = 1;
+            }
+
             this.$el.empty();
             this.$el.html(this.template());
             $('body').append(this.$el);
+            if(this.searchValue){
+                document.getElementById("searchValue").value = this.searchValue;
+            }
             return this;
     },
     
-    getResults: function(operation){
-        var searchValue = document.getElementById("searchValue").value;
+    getResults: function(){
+        this.searchValue = document.getElementById("searchValue").value;
         var parameters = 'SECURITY-APPNAME=AntonioR-c20d-4f92-aad4-791bfb005d8c&' +
-            'OPERATION-NAME=' + operation + '&SERVICE-VERSION=1.0.0&RESPONSE-DATA-FORMAT=JSON' +
-            '&REST-PAYLOAD&keywords=' + searchValue;
+            'OPERATION-NAME=' + this.operation + '&SERVICE-VERSION=1.0.0&RESPONSE-DATA-FORMAT=JSON' +
+            '&REST-PAYLOAD&keywords=' + this.searchValue + '&paginationInput.pageNumber=' + this.pageNumber +
+            '&&paginationInput.entriesPerPage=100';
         
         //Only show sold items since unsold item data is useless
-        if(operation == "findCompletedItems"){
+        if(this.operation == "findCompletedItems"){
             parameters = parameters + "&itemFilter(0).name=SoldItemsOnly" +
                        + "&itemFilter(0).value=true";
             this.currentCollection = new ebayTrends.graphCollection();
@@ -37,10 +72,10 @@ ebayTrends.searchView = Backbone.View.extend({
         
         this.currentCollection.fetch({dataType: 'jsonp', data: parameters, success: (function(context){
             return function(){
-                if(operation == "findItemsByKeywords"){
+                if(context.operation == "findItemsByKeywords"){
                     context.createTable();
                 }
-                else if(operation == "findCompletedItems"){
+                else if(context.operation == "findCompletedItems"){
                     context.createGraph();
                 }
                 else{
@@ -107,6 +142,12 @@ ebayTrends.tableView = Backbone.View.extend({
             this.$el.append($tr);
         }, this);
         
+        var pageButtons = 
+              "<button type='button' id='previousPage'> Previous </button>" +
+              "<button type='button' id='nextPage'> Next </button>        ";
+              
+              
+        this.$el.append(pageButtons);      
         return this;
     }
     
@@ -150,7 +191,6 @@ ebayTrends.graphView = Backbone.View.extend({
         var averagePrice = ebayTrends.utils.calculateAverage(values);
         var medianPrice = ebayTrends.utils.calculateMedian(values);
         var modePrice = ebayTrends.utils.calculateMode(values);
-        console.log(medianPrice);
         
         document.getElementById("avgPrice").innerHTML = "$" + averagePrice.toFixed(2);
         document.getElementById("medianPrice").innerHTML = "$" + medianPrice.toFixed(2);

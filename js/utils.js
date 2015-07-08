@@ -22,7 +22,7 @@ ebayTrends.utils ={
         //Deep copy data2
         var data = [];
         for(var i = 0; i < data2.length; i++){
-            data.push(parseFloat(data2[i]));
+            data.push(parseFloat(data2[i])) ;
         }
         
         data.sort( 
