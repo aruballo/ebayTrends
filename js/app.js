@@ -54,21 +54,21 @@ ebayTrends.searchView = Backbone.View.extend({
         $('body').append(this.$el);
         
         //bring back the previously used searchValue
-        if(this.searchValue){
-            document.getElementById("searchValue").value = this.searchValue;
+        if(this.lastSearchValue){
+            document.getElementById("searchValue").value = this.lastSearchValue;
         }
         return this;
     },
     
     getResults: function(){
         
-        this.searchValue = document.getElementById("searchValue").value;
+        this.lastSearchValue = document.getElementById("searchValue").value;
         
         //See eBay API for more details 
         var parameters = 'SECURITY-APPNAME=AntonioR-c20d-4f92-aad4-791bfb005d8c&' +
             'OPERATION-NAME=' + this.operation + '&SERVICE-VERSION=1.0.0&RESPONSE-DATA-FORMAT=JSON' +
-            '&REST-PAYLOAD&keywords=' + this.searchValue + '&paginationInput.pageNumber=' + this.pageNumber +
-            '&&paginationInput.entriesPerPage=100';
+            '&REST-PAYLOAD&keywords=' + this.lastSearchValue + '&paginationInput.pageNumber=' + this.pageNumber +
+            '&paginationInput.entriesPerPage=100';
         
         //Only show sold items since unsold item data is useless
         if(this.operation == "findCompletedItems"){
@@ -81,7 +81,7 @@ ebayTrends.searchView = Backbone.View.extend({
         }
         
         //Success function is a closure in order to preserve the current context 
-        //when the function is called
+        //when the success function is called
         this.currentCollection.fetch({dataType: 'jsonp', data: parameters, success: (function(context){
             return function(){
                 if(context.operation == "findItemsByKeywords"){
