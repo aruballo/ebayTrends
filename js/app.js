@@ -10,11 +10,17 @@ ebayTrends.searchView = Backbone.View.extend({
     events:{
       "click #searchButton": 
       function(){
+          if(document.getElementById('searchValue').value == ''){
+              return;
+          }
           this.operation = 'findItemsByKeywords';
           this.getResults();
       },
       "click #graphButton": 
       function(){
+          if(document.getElementById('searchValue').value == ''){
+              return;
+          }
           this.operation = 'findCompletedItems';
           this.getResults();
       },
