@@ -115,6 +115,13 @@ ebayTrends.searchView = Backbone.View.extend({
         });
         var $table = currentResults.render().$el;
         this.$el.append($table);
+        if(currentResults.collection.length < 100){
+            if(this.pageNumber == 1){
+                document.getElementById("previousPage").style.visibility = "hidden";  
+            }
+            document.getElementById("nextPage").style.visibility = "hidden";            
+        }
+        
     }
 });
 
