@@ -2,6 +2,7 @@ var ebayTrends = ebayTrends || {};
 
 ebayTrends.model = Backbone.Model.extend({});
 
+//Collection for a search query
 ebayTrends.searchCollection = Backbone.Collection.extend({
     
     model: ebayTrends.model,
@@ -14,6 +15,7 @@ ebayTrends.searchCollection = Backbone.Collection.extend({
     
 });
 
+//Collection for a graph query
 ebayTrends.graphCollection = Backbone.Collection.extend({
     
     model: ebayTrends.model,

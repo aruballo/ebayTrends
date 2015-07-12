@@ -1,9 +1,10 @@
+//Miscellaneous utilities like mathematical 
+//calulations
+
 var ebayTrends = ebayTrends || {};
 
 ebayTrends.utils ={
     calculateAverage: function(data){
-
-        
         var sum = 0;
         var total = data.length;
        
@@ -19,7 +20,7 @@ ebayTrends.utils ={
     },
     
     calculateMedian: function(data2){
-        //Deep copy data2
+        //Deep copy data2, to avoid sorting data2
         var data = [];
         for(var i = 0; i < data2.length; i++){
             data.push(parseFloat(data2[i])) ;
@@ -42,6 +43,7 @@ ebayTrends.utils ={
     },
     
     calculateMode: function(data){
+ 
         if(data.length == 0){
             return null;
         }

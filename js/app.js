@@ -44,23 +44,27 @@ ebayTrends.searchView = Backbone.View.extend({
       }
     },
     
-    render: function(){
+    render: function(){     
+        if(!this.pageNumber){
+            this.pageNumber = 1;
+        }
         
-            if(!this.pageNumber){
-                this.pageNumber = 1;
-            }
-
-            this.$el.empty();
-            this.$el.html(this.template());
-            $('body').append(this.$el);
-            if(this.searchValue){
-                document.getElementById("searchValue").value = this.searchValue;
-            }
-            return this;
+        this.$el.empty();
+        this.$el.html(this.template());
+        $('body').append(this.$el);
+        
+        //bring back the previously used searchValue
+        if(this.searchValue){
+            document.getElementById("searchValue").value = this.searchValue;
+        }
+        return this;
     },
     
     getResults: function(){
+        
         this.searchValue = document.getElementById("searchValue").value;
+        
+        //See eBay API for more details 
         var parameters = 'SECURITY-APPNAME=AntonioR-c20d-4f92-aad4-791bfb005d8c&' +
             'OPERATION-NAME=' + this.operation + '&SERVICE-VERSION=1.0.0&RESPONSE-DATA-FORMAT=JSON' +
             '&REST-PAYLOAD&keywords=' + this.searchValue + '&paginationInput.pageNumber=' + this.pageNumber +
@@ -76,6 +80,8 @@ ebayTrends.searchView = Backbone.View.extend({
             this.currentCollection = new ebayTrends.searchCollection();
         }
         
+        //Success function is a closure in order to preserve the current context 
+        //when the function is called
         this.currentCollection.fetch({dataType: 'jsonp', data: parameters, success: (function(context){
             return function(){
                 if(context.operation == "findItemsByKeywords"){
@@ -166,6 +172,7 @@ ebayTrends.graphView = Backbone.View.extend({
         this.$el.empty();
         this.$el.html(this.template());
         $('body').append(this.$el);
+        
         this.ctx = document.getElementById("itemTrendsGraph").getContext("2d");
         this.ctx.canvas.width = 1000;
         this.ctx.canvas.height = 500;
