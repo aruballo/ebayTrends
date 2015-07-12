@@ -4,7 +4,7 @@
     <link href="css/bootstrap.min.css" rel="stylesheet"></link>
     <script id="resultsRow" type="text/template">
         <tr>
-            <td><%=title[0]%></td>
+            <td><a href='<%=viewItemURL[0]%>' target='_blank'><%=title[0]%></a></td>
             <td><%=condition[0].conditionDisplayName%></td>
             <td><%=sellingStatus[0].currentPrice[0].__value__%></td>
             <td></td>
@@ -14,7 +14,7 @@
         <h4>Enter keywords to search eBay</h2>
         <div id="searchCriteria">
             <input id="searchValue"> </input>
-            <button type="button" id="searchButton">Search</button>
+            <button type="button" id="searchButton">Search Current Listings</button>
             <button type="button" id="graphButton">Graph Average Prices</button>
         </div>
     </script>

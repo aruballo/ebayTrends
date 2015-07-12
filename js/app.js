@@ -131,6 +131,7 @@ ebayTrends.tableRowView = Backbone.View.extend({
 //View for table
 ebayTrends.tableView = Backbone.View.extend({
     tagName: 'table',
+    className: 'table-bordered table-hover',
     initialize: function(){
         this.collection.bind("reset", this.render, this);
     },
@@ -142,7 +143,7 @@ ebayTrends.tableView = Backbone.View.extend({
               "    <th>Title      </th> " +
               "    <th>Condition  </th> " +
               "    <th>Price</th>       " +
-              "    <th>Shipping   </th> " +
+//              "    <th>Shipping   </th> " +
               "  </tr>                  " +
               "</thead>                 ";
         
