@@ -1,0 +1,29 @@
+<script id="resultsRow" type="text/template">
+    <tr>
+        <td><a href='<%=viewItemURL[0]%>' target='_blank'><%=title[0]%></a></td>
+        <td><%=condition[0].conditionDisplayName%></td>
+        <td><%=sellingStatus[0].currentPrice[0].__value__%></td>
+        <td></td>
+    </tr>
+</script>
+<script id="mainDiv" type="text/template">
+    <h4>Enter keywords to search eBay</h2>
+    <div id="searchCriteria">
+        <input id="searchValue"> </input>
+        <button type="button" id="searchButton">Search Current Listings</button>
+        <button type="button" id="graphButton">Graph Average Prices</button>
+    </div>
+</script>
+<script id="graph" type="text/template">
+    <div id="graphDiv">
+        <canvas id="itemTrendsGraph"></canvas>
+        <div id="avgDiv">
+            <label for="avgPrice"> Average Price </label>
+            <span id="avgPrice"></span>
+            <label for="medianPrice"> Median Price </label>
+            <span id="medianPrice"></span>
+            <label for="modePrice"> Mode Price </label>
+            <span id="modePrice"></span>
+        </div>
+    </div>
+</script>

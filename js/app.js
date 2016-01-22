@@ -4,11 +4,11 @@ var ebayTrends = ebayTrends || {};
 //Main View
 ebayTrends.searchView = Backbone.View.extend({
     template: _.template($('#mainDiv').html()),
-    
+
     tagName: 'div',
-    
+
     events:{
-      "click #searchButton": 
+      "click #searchButton":
       function(){
           if(document.getElementById('searchValue').value == ''){
               return;
@@ -16,7 +16,7 @@ ebayTrends.searchView = Backbone.View.extend({
           this.operation = 'findItemsByKeywords';
           this.getResults();
       },
-      "click #graphButton": 
+      "click #graphButton":
       function(){
           if(document.getElementById('searchValue').value == ''){
               return;
@@ -24,7 +24,7 @@ ebayTrends.searchView = Backbone.View.extend({
           this.operation = 'findCompletedItems';
           this.getResults();
       },
-      "click #nextPage": 
+      "click #nextPage":
       function(){
           this.pageNumber++;
           if(this.pageNumber > 100){
@@ -33,7 +33,7 @@ ebayTrends.searchView = Backbone.View.extend({
           }
           this.getResults();
       },
-      "click #previousPage": 
+      "click #previousPage":
       function(){
           if(this.pageNumber <= 1){
               this.pageNumber = 1;
@@ -43,33 +43,33 @@ ebayTrends.searchView = Backbone.View.extend({
           this.getResults();
       }
     },
-    
-    render: function(){     
+
+    render: function(){
         if(!this.pageNumber){
             this.pageNumber = 1;
         }
-        
+
         this.$el.empty();
-        this.$el.html(this.template());
+        this.$el.html(this.template);
         $('body').append(this.$el);
-        
+
         //bring back the previously used searchValue
         if(this.lastSearchValue){
             document.getElementById("searchValue").value = this.lastSearchValue;
         }
         return this;
     },
-    
+
     getResults: function(){
-        
+
         this.lastSearchValue = document.getElementById("searchValue").value;
-        
-        //See eBay API for more details 
+
+        //See eBay API for more details
         var parameters = 'SECURITY-APPNAME=AntonioR-c20d-4f92-aad4-791bfb005d8c&' +
             'OPERATION-NAME=' + this.operation + '&SERVICE-VERSION=1.0.0&RESPONSE-DATA-FORMAT=JSON' +
             '&REST-PAYLOAD&keywords=' + this.lastSearchValue + '&paginationInput.pageNumber=' + this.pageNumber +
             '&paginationInput.entriesPerPage=100';
-        
+
         //Only show sold items since unsold item data is useless
         if(this.operation == "findCompletedItems"){
             parameters = parameters + "&itemFilter(0).name=SoldItemsOnly" +
@@ -79,8 +79,8 @@ ebayTrends.searchView = Backbone.View.extend({
         else{
             this.currentCollection = new ebayTrends.searchCollection();
         }
-        
-        //Success function is a closure in order to preserve the current context 
+
+        //Success function is a closure in order to preserve the current context
         //when the success function is called
         this.currentCollection.fetch({dataType: 'jsonp', data: parameters, success: (function(context){
             return function(){
@@ -95,9 +95,9 @@ ebayTrends.searchView = Backbone.View.extend({
                 }
             };
         })(this)});
-      
+
     },
-    
+
     createGraph: function(){
         this.render();
         var currentResults =  new ebayTrends.graphView({
@@ -105,9 +105,9 @@ ebayTrends.searchView = Backbone.View.extend({
         });
         var $graph = currentResults.render().$el;
         this.$el.append($graph);
-        
+
     },
-    
+
     createTable: function(){
         this.render();
         var currentResults = new ebayTrends.tableView({
@@ -117,11 +117,11 @@ ebayTrends.searchView = Backbone.View.extend({
         this.$el.append($table);
         if(currentResults.collection.length < 100){
             if(this.pageNumber == 1){
-                document.getElementById("previousPage").style.visibility = "hidden";  
+                document.getElementById("previousPage").style.visibility = "hidden";
             }
-            document.getElementById("nextPage").style.visibility = "hidden";            
+            document.getElementById("nextPage").style.visibility = "hidden";
         }
-        
+
     }
 });
 
@@ -138,39 +138,38 @@ ebayTrends.tableRowView = Backbone.View.extend({
 //View for table
 ebayTrends.tableView = Backbone.View.extend({
     tagName: 'table',
-    className: 'table-bordered table-hover',
+    className: 'pure-table pure-table-striped',
     initialize: function(){
         this.collection.bind("reset", this.render, this);
     },
     render: function(eventName){
         this.$el.empty();
-        var tableHeader =   
+        var tableHeader =
               "<thead>                  " +
               "  <tr>                   " +
               "    <th>Title      </th> " +
               "    <th>Condition  </th> " +
               "    <th>Price</th>       " +
-//              "    <th>Shipping   </th> " +
               "  </tr>                  " +
               "</thead>                 ";
-        
+
         this.$el.append(tableHeader);
-        
+
         this.collection.each(function(result){
             var row = new ebayTrends.tableRowView({model: result});
             var $tr = row.render().$el;
             this.$el.append($tr);
         }, this);
-        
-        var pageButtons = 
-              "<button type='button' id='previousPage'> Previous </button>" +
-              "<button type='button' id='nextPage'> Next </button>        ";
-              
-              
-        this.$el.append(pageButtons);      
+
+        var pageButtons =
+              "<button class='pure-button button-secondary' type='button' id='previousPage'> Previous </button>" +
+              "<button class='pure-button button-secondary' type='button' id='nextPage'> Next </button>        ";
+
+
+        this.$el.append(pageButtons);
         return this;
     }
-    
+
 });
 
 //View for Chart.js graph
@@ -180,21 +179,21 @@ ebayTrends.graphView = Backbone.View.extend({
         this.$el.empty();
         this.$el.html(this.template());
         $('body').append(this.$el);
-        
+
         this.ctx = document.getElementById("itemTrendsGraph").getContext("2d");
         this.ctx.canvas.width = 1000;
         this.ctx.canvas.height = 500;
-        
+
         //create array of values to chart
         var values = [];
         var labels = [];
         var collectionJSON = this.collection.toJSON();
-        
+
         for(var i = 0; i < collectionJSON.length; i++){
             values.push(collectionJSON[i].sellingStatus[0].currentPrice[0].__value__);
             labels.push(i+1);
         }
-        
+
         var data = {
             labels: labels,
             datasets: [{
@@ -208,24 +207,23 @@ ebayTrends.graphView = Backbone.View.extend({
                 data: values
             }]
         };
-        
+
         var averagePrice = ebayTrends.utils.calculateAverage(values);
         var medianPrice = ebayTrends.utils.calculateMedian(values);
         var modePrice = ebayTrends.utils.calculateMode(values);
-        
+
         document.getElementById("avgPrice").innerHTML = "$" + averagePrice.toFixed(2);
         document.getElementById("medianPrice").innerHTML = "$" + medianPrice.toFixed(2);
         document.getElementById("modePrice").innerHTML = "$" + modePrice.toFixed(2);
-        
+
         var options = {
-            bezierCurve : false           
+            bezierCurve : false
         };
 
         this.chart = new Chart(this.ctx).Line(data, options);
         return this;
     },
 });
-
 
 ebayTrends.mainView = new ebayTrends.searchView();
 ebayTrends.mainView.render();
