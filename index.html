@@ -6,6 +6,7 @@
        <meta name="viewport" content="width=device-width, initial-scale=1.0">
        <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
        <link rel="stylesheet" href="css/aligner.css">
+       <link rel="stylesheet" href="css/app.css">
     </head>
     <body class="Aligner">
     <script id="resultsRow" type="text/template">
@@ -16,12 +17,14 @@
         </tr>
     </script>
     <script id="mainDiv" type="text/template">
-        <h4>Enter keywords to search eBay</h2>
-        <div id="searchCriteria">
-            <input id="searchValue"> </input>
-            <button type="button" id="searchButton" class="pure-button pure-button-primary button-large">Search Current Listings</button>
-            <button type="button" id="graphButton" class="pure-button pure-button-primary button-large">Graph Average Prices</button>
-        </div>
+        <form id="searchForm" class="pure-form Aligner column-ordering">
+            <h4>Enter keywords to search eBay</h2>
+            <input id="searchValue" class="pure-input-1 bottom-margin"> </input>
+            <div id="mainActions" class = "bottom-margin">
+                <button type="button" id="searchButton" class="pure-button pure-button-primary button-large">Search Current Listings</button>
+                <button type="button" id="graphButton" class="pure-button pure-button-primary button-large">Graph Average Prices</button>
+            </div>
+        </form>
     </script>
     <script id="graph" type="text/template">
         <div id="graphDiv">

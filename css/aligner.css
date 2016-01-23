@@ -4,6 +4,10 @@
   justify-content: center;
 }
 
+.column-ordering {
+	flex-direction: column;
+}
+
 .Aligner-item {
   max-width: 50%;
 }
