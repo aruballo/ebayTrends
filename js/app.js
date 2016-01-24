@@ -7,6 +7,8 @@ ebayTrends.searchView = Backbone.View.extend({
 
     tagName: 'div',
 
+    id: 'mainView',
+
     events:{
       "click #searchButton":
       function(){
@@ -51,7 +53,7 @@ ebayTrends.searchView = Backbone.View.extend({
 
         this.$el.empty();
         this.$el.html(this.template);
-        $('body').append(this.$el);
+        $('#parentDiv').append(this.$el);
 
         //bring back the previously used searchValue
         if(this.lastSearchValue){
@@ -115,6 +117,14 @@ ebayTrends.searchView = Backbone.View.extend({
         });
         var $table = currentResults.render().$el;
         this.$el.append($table);
+
+        var pageButtons =
+              "<div id='pageButtons' class='Aligner'>" +
+              "<button class='pure-button pure-button-primary button-large' type='button' id='previousPage'> Previous </button>" +
+              "<button class='pure-button pure-button-primary button-large' type='button' id='nextPage'> Next </button>" +
+              "</div>";
+        this.$el.append(pageButtons);
+
         if(currentResults.collection.length < 100){
             if(this.pageNumber == 1){
                 document.getElementById("previousPage").style.visibility = "hidden";
@@ -138,7 +148,7 @@ ebayTrends.tableRowView = Backbone.View.extend({
 //View for table
 ebayTrends.tableView = Backbone.View.extend({
     tagName: 'table',
-    className: 'pure-table pure-table-striped',
+    className: 'pure-table pure-table-striped bottom-margin',
     initialize: function(){
         this.collection.bind("reset", this.render, this);
     },
@@ -161,13 +171,7 @@ ebayTrends.tableView = Backbone.View.extend({
             this.$el.append($tr);
         }, this);
 
-        var pageButtons =
-              "<button class='pure-button button-secondary' type='button' id='previousPage'> Previous </button>" +
-              "<button class='pure-button button-secondary' type='button' id='nextPage'> Next </button>        ";
-
-
-        this.$el.append(pageButtons);
-        return this;
+    return this;
     }
 
 });

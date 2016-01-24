@@ -1,7 +1,22 @@
+body {
+	background-color: lightgrey;
+}
+
 #searchValue {
 	width: 400px;
 }
 
+#mainView {
+	background-color: white;
+	padding: 20px;
+	border-radius: 5px;
+}
+
+#previousPage, #nextPage{
+	width: 250px;
+	height: 50px;
+	margin: 10px;
+}
 .bottom-margin {
 	margin-bottom: 10px;
 }
