@@ -125,13 +125,14 @@ ebayTrends.searchView = Backbone.View.extend({
               "</div>";
         this.$el.append(pageButtons);
 
-        if(currentResults.collection.length < 100){
-            if(this.pageNumber == 1){
-                document.getElementById("previousPage").style.visibility = "hidden";
-            }
+        $("#mainTable").tablesorter();
+
+        if (this.pageNumber == 1){
+            document.getElementById("previousPage").style.visibility = "hidden";
+        }
+        if (currentResults.collection.length < 100){
             document.getElementById("nextPage").style.visibility = "hidden";
         }
-
     }
 });
 
@@ -148,7 +149,8 @@ ebayTrends.tableRowView = Backbone.View.extend({
 //View for table
 ebayTrends.tableView = Backbone.View.extend({
     tagName: 'table',
-    className: 'pure-table pure-table-striped bottom-margin',
+    className: 'pure-table pure-table-striped bottom-margin tablesorter',
+    id: 'mainTable',
     initialize: function(){
         this.collection.bind("reset", this.render, this);
     },

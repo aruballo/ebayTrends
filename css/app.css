@@ -2,6 +2,10 @@ body {
 	background-color: lightgrey;
 }
 
+th:hover {
+	cursor: pointer;
+}
+
 #searchValue {
 	width: 400px;
 }
