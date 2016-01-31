@@ -21,6 +21,13 @@ th:hover {
 	height: 50px;
 	margin: 10px;
 }
+
+#loadingIcon {
+	width: 30px;
+	height: 30px;
+	position: absolute;
+	display: none;
+}
 .bottom-margin {
 	margin-bottom: 10px;
 }

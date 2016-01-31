@@ -17,6 +17,7 @@ ebayTrends.searchView = Backbone.View.extend({
           }
           this.operation = 'findItemsByKeywords';
           this.getResults();
+          document.getElementById('loadingIcon').style.display = 'block';
       },
       "click #graphButton":
       function(){
@@ -25,6 +26,7 @@ ebayTrends.searchView = Backbone.View.extend({
           }
           this.operation = 'findCompletedItems';
           this.getResults();
+          document.getElementById('loadingIcon').style.display = 'block';
       },
       "click #nextPage":
       function(){
@@ -34,6 +36,7 @@ ebayTrends.searchView = Backbone.View.extend({
               return;
           }
           this.getResults();
+          document.getElementById('loadingIcon').style.display = 'block';
       },
       "click #previousPage":
       function(){
@@ -43,6 +46,7 @@ ebayTrends.searchView = Backbone.View.extend({
           }
           this.pageNumber--;
           this.getResults();
+          document.getElementById('loadingIcon').style.display = 'block';
       }
     },
 
